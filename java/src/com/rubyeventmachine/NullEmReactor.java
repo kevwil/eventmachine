@@ -45,6 +45,10 @@ public class NullEmReactor implements EmReactorInterface
 		return 0;
 	}
 
+	public long startUnixServer(String filename) throws EmReactorException {
+		return 0;
+	}
+
 	public void stopTcpServer(long signature) throws IOException
 	{
 
@@ -153,5 +157,10 @@ public class NullEmReactor implements EmReactorInterface
 	public int getConnectionCount()
 	{
 		return 0;
+	}
+
+	public boolean isWatchOnly(long sig)
+	{
+		return false;
 	}
 }

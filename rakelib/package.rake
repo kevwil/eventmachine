@@ -20,6 +20,7 @@ end
 if RUBY_PLATFORM =~ /java/
   Rake::JavaExtensionTask.new("rubyeventmachine", GEMSPEC) do |ext|
     ext.ext_dir = 'java/src'
+    ext.release = '16'
   end
 else
   def setup_cross_compilation(ext)

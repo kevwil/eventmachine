@@ -21,6 +21,7 @@ vendor/bundle/
 .yardoc/*
 doc/*
 tmp/*
+.ruby-version
 
 # windows local build artifacts
 /win_gem_test/shared/

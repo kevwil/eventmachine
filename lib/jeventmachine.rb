@@ -28,6 +28,7 @@
 # which is a garden-variety Ruby-extension glue module.
 
 require 'java'
+require 'jruby'
 require 'rubyeventmachine'
 require 'socket'
 
@@ -137,8 +138,7 @@ module EventMachine
     @em.stopTcpServer sig
   end
   def self.start_unix_server filename
-    # TEMPORARILY unsupported until someone figures out how to do it.
-    raise "unsupported on this platform"
+    @em.startUnixServer filename
   end
   def self.send_data sig, data, length
     @em.sendData sig, data.to_java_bytes
@@ -227,18 +227,21 @@ module EventMachine
       Socket.pack_sockaddr_in(*sockName)
     end
   end
+  def self.watch_only? sig
+    @em.isWatchOnly sig
+  end
   # @private
   def self.attach_fd fileno, watch_mode
     # 3Aug09: We could pass in the actual SocketChannel, but then it would be modified (set as non-blocking), and
     # we would need some logic to make sure detach_fd below didn't clobber it. For now, we just always make a new
     # SocketChannel for the underlying file descriptor
-    # if fileno.java_kind_of? SocketChannel
+    # if fileno.kind_of? SocketChannel
     #   ch = fileno
     #   ch.configureBlocking(false)
     #   fileno = nil
-    # elsif fileno.java_kind_of? java.nio.channels.Channel
+    # elsif fileno.kind_of? java.nio.channels.Channel
 
-    if fileno.java_kind_of? java.nio.channels.Channel
+    if fileno.kind_of? java.nio.channels.Channel
       field = fileno.getClass.getDeclaredField('fdVal')
       field.setAccessible(true)
       fileno = field.get(fileno)

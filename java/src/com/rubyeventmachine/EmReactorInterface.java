@@ -24,6 +24,8 @@ public interface EmReactorInterface
 
 	long startTcpServer (String address, int port) throws EmReactorException;
 
+	long startUnixServer (String filename) throws EmReactorException;
+
 	void stopTcpServer (long signature) throws IOException;
 
 	long openUdpSocket (InetSocketAddress address) throws IOException;
@@ -67,4 +69,6 @@ public interface EmReactorInterface
 	boolean isNotifyWritable (long sig);
 
 	int getConnectionCount();
+
+	boolean isWatchOnly (long sig);
 }

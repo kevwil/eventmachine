@@ -414,6 +414,10 @@ public class EmReactor implements EmReactorInterface
 		return startTcpServer (new InetSocketAddress (address, port));
 	}
 
+	public long startUnixServer (String filename) throws EmReactorException {
+		return startTcpServer(UnixDomainSocketAddress.of(filename));
+	}
+
 	public void stopTcpServer (long signature) throws IOException {
 		ServerSocketChannel server = Acceptors.remove(signature);
 		if (server != null)
@@ -621,5 +625,9 @@ public class EmReactor implements EmReactorInterface
 	
 	public int getConnectionCount() {
 		return Connections.size() + Acceptors.size();
+	}
+
+	public boolean isWatchOnly (long sig) {
+		return getConnection(sig).isWatchOnly();
 	}
 }
