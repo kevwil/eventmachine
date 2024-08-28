@@ -30,6 +30,8 @@ package com.rubyeventmachine;
 
 import java.io.*;
 import java.nio.channels.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.nio.*;
 import java.net.*;
@@ -398,9 +400,13 @@ public class EmReactor implements EmReactorInterface
 
 	public long startTcpServer (SocketAddress sa) throws EmReactorException {
 		try {
-			ServerSocketChannel server = ServerSocketChannel.open();
+			ServerSocketChannel server =
+					(sa instanceof UnixDomainSocketAddress) ?
+					ServerSocketChannel.open(StandardProtocolFamily.UNIX) :
+					ServerSocketChannel.open();
 			server.configureBlocking(false);
-			server.socket().bind (sa);
+			// server.socket().bind(sa);
+			server.bind(sa);
 			long s = createBinding();
 			Acceptors.put(s, server);
 			server.register(mySelector, SelectionKey.OP_ACCEPT, s);
@@ -415,7 +421,13 @@ public class EmReactor implements EmReactorInterface
 	}
 
 	public long startUnixServer (String filename) throws EmReactorException {
-		return startTcpServer(UnixDomainSocketAddress.of(filename));
+		Path path = Path.of(filename);
+        try {
+			Files.deleteIfExists(path);
+        } catch (IOException e) {
+            throw new RuntimeException("failed to delete unix socket file: "+path, e);
+        }
+        return startTcpServer(UnixDomainSocketAddress.of(filename));
 	}
 
 	public void stopTcpServer (long signature) throws IOException {

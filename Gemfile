@@ -12,3 +12,5 @@ group :documentation do
   gem 'yard', '>= 0.8.5.2'
   gem 'redcarpet' unless RUBY_PLATFORM =~ /java|mswin/
 end
+
+gem 'ruby-lsp', '0.17.2', group: :development

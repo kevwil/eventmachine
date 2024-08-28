@@ -36,6 +36,7 @@ package com.rubyeventmachine;
  *
  */
 
+import java.lang.reflect.InaccessibleObjectException;
 import java.nio.channels.*;
 import java.nio.*;
 import java.util.*;
@@ -127,10 +128,8 @@ public class EventableSocketChannel implements EventableChannel {
 				f = fd.getClass().getDeclaredField("fd");
 				f.setAccessible(true);
 				f.set(fd, -1);
-			} catch (java.lang.NoSuchFieldException e) {
-				e.printStackTrace();
-			} catch (java.lang.IllegalAccessException e) {
-				e.printStackTrace();
+			} catch (NoSuchFieldException | IllegalAccessException | InaccessibleObjectException e) {
+				e.printStackTrace(System.err);
 			}
 
 			return;

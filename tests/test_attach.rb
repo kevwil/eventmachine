@@ -66,7 +66,7 @@ class TestAttach < Test::Unit::TestCase
   end
 
   def test_attach_server
-    omit_if(jruby?)
+    # omit_if(jruby?)
     $before = TCPServer.new("127.0.0.1", @port)
     sig     = nil
     EM.run {
@@ -151,7 +151,7 @@ class TestAttach < Test::Unit::TestCase
   # This test shows that watch_only? is true for EM.watch
   def test_watch_only
     r, w = IO.pipe
-    $watch_only = nil
+    $watch_only = false
 
     EM.run do
       EM.watch r do |c|
@@ -175,7 +175,7 @@ class TestAttach < Test::Unit::TestCase
   def test_attach_data
     pend("\nFIXME: Freezes Windows testing as of 2018-07-31") if windows?
     r, w = IO.pipe
-    $watch_only = nil
+    $watch_only = false
     $read = []
 
     EM.run do
